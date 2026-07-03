@@ -1,5 +1,5 @@
 {
-	"name": "think-like-fable",
+	"name": "@tf00185077/think-like-fable",
 	"version": "0.1.0",
 	"description": "Installs the think-like-fable working-method skill (decompose, route, verify) as a slash command for Claude Code and Codex CLI.",
 	"keywords": ["claude", "claude-code", "codex", "skill", "slash-command", "agent", "methodology", "debugging"],

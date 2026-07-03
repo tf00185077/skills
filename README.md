@@ -7,14 +7,16 @@ Distilled from a frontier model's problem-solving loop and hardened by TDD again
 ## Install
 
 ```bash
-npm install -g think-like-fable
+npm install -g @tf00185077/think-like-fable
 ```
 
 Installing auto-runs the installer. You can rerun it anytime:
 
 ```bash
-npx think-like-fable            # install (default)
-npx think-like-fable uninstall
+npx @tf00185077/think-like-fable              # install (default)
+npx @tf00185077/think-like-fable uninstall
+# or, after global install:
+think-like-fable [install|uninstall]
 ```
 
 It copies the skill to:
