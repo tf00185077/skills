@@ -2,7 +2,16 @@
 	"name": "@tf00185077/think-like-fable",
 	"version": "0.1.0",
 	"description": "Installs the think-like-fable working-method skill (decompose, route, verify) as a slash command for Claude Code and Codex CLI.",
-	"keywords": ["claude", "claude-code", "codex", "skill", "slash-command", "agent", "methodology", "debugging"],
+	"keywords": [
+		"claude",
+		"claude-code",
+		"codex",
+		"skill",
+		"slash-command",
+		"agent",
+		"methodology",
+		"debugging"
+	],
 	"license": "MIT",
 	"author": "tf00185077",
 	"repository": {
@@ -13,7 +22,11 @@
 	"bin": {
 		"think-like-fable": "bin/cli.js"
 	},
-	"files": ["bin", "skill", "README.md"],
+	"files": [
+		"bin",
+		"SKILL.md",
+		"README.md"
+	],
 	"scripts": {
 		"postinstall": "node bin/cli.js install --from-postinstall"
 	},

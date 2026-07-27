@@ -10,7 +10,7 @@ const path = require("path");
 const os = require("os");
 
 const SKILL_NAME = "think-like-fable";
-const skillSrc = path.join(__dirname, "..", "skill", "SKILL.md");
+const skillSrc = path.join(__dirname, "..", "SKILL.md");
 
 const home = os.homedir();
 const targets = [
