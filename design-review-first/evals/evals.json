@@ -1,0 +1,17 @@
+{
+  "skill_name": "design-review-first",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We're getting slow API responses because PDF thumbnail generation runs inline in the request. I want to move it to a background worker pool so the API just enqueues a job and returns. Can you set that up in our Flask app? Redis is already available.",
+      "expected_output": "Runs a failure-first design review BEFORE code: triages this as structural (crosses API<->queue<->worker boundary), draws a failure map, walks incident scenarios (worker down, redis down, job stuck), separates failure policies, proposes fitness tests, then a short code plan. Does NOT dive straight into writing enqueue/worker code.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "In auth.py the variable is spelled `usr` in three places and the login error message says 'Invaild password'. Rename the variable to `user` and fix the typo.",
+      "expected_output": "Correctly triages this as a local single-component change and skips the full review (states the skip in one line), then just does the rename/typo fix. Does NOT run a full failure map / tabletop for a trivial local edit.",
+      "files": []
+    }
+  ]
+}
