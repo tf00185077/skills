@@ -23,26 +23,29 @@ A spec is a list of **intents**. Each intent:
 `user_visible` and `sensitivity` exist **only** so the tier can be derived. The spec never states a
 test level.
 
-### Artifacts: one folder per round
+### Artifacts: one folder per build
 
-Each user request is **one round**, and one round gets **its own folder** under `docs/reviewspec/` in
-the target project (version-controlled next to the code). Inside that folder live the round's three
-artifacts, distinguished by suffix:
+Each user request is **one build**, and one build gets **its own folder** under `docs/reviewspec/` in
+the target project (version-controlled next to the code). Inside that folder live the build's
+artifacts, one **fixed filename** per role:
 
 ```
 docs/reviewspec/<build>/
-├── <build>.md            ← the spec (this round's request)          — written by reviewspec-converge
-├── <build>.manifest.md   ← the claims manifest                      — written by reviewspec-build
-└── <build>.review.md     ← the reviewspec-review verdict + coverage map   — written by reviewspec-review
+├── spec.md       ← the spec           — written by reviewspec-converge
+├── manifest.md   ← the claims manifest — written by reviewspec-build
+└── review.md     ← the reviewspec-review verdict + coverage map — written by reviewspec-review
 ```
 
-Why a folder per round: the spec (an *input*), the manifest (the coding agent's *claims*), and the
-review (the gate's *verdict*) are three different kinds of thing produced by three different roles.
-Grouping them under one `<build>/` keeps everything about one round together and traceable, while the
-`.manifest` / `.review` suffixes keep the *kinds* unambiguous. The base file `<build>.md` (no suffix)
-is always the spec.
+(The chain also drops `explore.md`, `design-review.md`, and `state.json` in the same folder; those
+belong to the earlier phases and are defined in their own skills. This contract governs the
+spec / manifest / review triad.)
 
-The rest of this section describes the **spec** file (`<build>.md`); the manifest and review shapes
+Why a folder per build: the spec (an *input*), the manifest (the coding agent's *claims*), and the
+review (the gate's *verdict*) are three different kinds of thing produced by three different roles.
+Grouping them under one `<build>/` keeps everything about one build together and traceable, while the
+**fixed filenames** (`spec.md` / `manifest.md` / `review.md`) keep the *kinds* unambiguous.
+
+The rest of this section describes the **spec** file (`spec.md`); the manifest and review shapes
 are defined later in this file and in the reviewspec-review skill respectively.
 
 **This format is a hard contract, not a suggestion.** Everything *inside* the fields is free prose
@@ -85,8 +88,8 @@ These rules are machine-checkable. Run the validator to enforce them:
 python <reviewspec-core>/scripts/validate_spec.py docs/reviewspec/<build>/spec.md
 ```
 
-With no arguments it checks every spec under `docs/reviewspec/*/` (the `<build>.md` files, skipping
-`.manifest.md` / `.review.md`); pass a file or a round folder to target specific ones. Exit code
+With no arguments it checks every `docs/reviewspec/*/spec.md`; pass a file or a build folder to
+target specific ones. Exit code
 0 = structurally valid, 1 = errors (warnings, e.g. a missing title, don't fail). It checks
 *structure* only — never whether the content is good or complete, which stays a deliberately
 un-pinned judgement. The reviewspec-converge agent runs this before handoff, and it can gate CI.

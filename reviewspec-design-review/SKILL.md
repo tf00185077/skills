@@ -1,10 +1,22 @@
 ---
 name: reviewspec-design-review
-description: >-
-
+disable-model-invocation: true
+description: Phase 3 of the reviewspec chain — the design gate. An independent agent stress-tests a spec's failure modes before any code (failure map, tabletop, failure-policy separation, fitness tests). Invoke by name, or via reviewspec-dispatch.
 ---
 
-# Design Review First
+# reviewspec · Design Review (phase 3)
+
+## Role in the chain
+
+The **adversarial design gate**, run by an agent independent of whoever wrote the spec. It reviews
+the *design* — not code — which in this chain means the spec produced by `reviewspec-converge`.
+
+- **Reads:** `docs/reviewspec/<build>/spec.md` (the design under review) · `docs/reviewspec/<build>/explore.md` · `docs/decisions/<system>.md` (prior decisions) · the existing codebase it integrates with.
+- **Writes:** `docs/reviewspec/<build>/design-review.md` — the findings, the go/no-go, and the **fitness tests** `reviewspec-build` must satisfy.
+- **Gate:** clears only when no load-bearing risk is unresolved; then the build phase starts as a fresh, independent agent.
+
+Standalone (outside the chain) it reviews any design or structural change the same way — "the spec"
+below just means whatever design artifact you point it at.
 
 ## What this defends against
 
@@ -65,7 +77,8 @@ The user's request is never complete — hidden risk lives in the gap between wh
 what must be *true*. Recover that gap before designing; guessing the domain silently is what goes
 wrong.
 
-If `docs/reviewspec/` holds a prior record for this area, **read it first**. Honor each
+Read the spec under review (`docs/reviewspec/<build>/spec.md`) and the subsystem's decision memory
+`docs/decisions/<system>.md` **first**. Honor each recorded
 entry by its provenance tag: a `user-confirmed` decision that a new decision would contradict is a
 conflict to *surface*, not silently override; `artifact-verified` and `assumed` entries may be
 stale — re-check them against current code. An `assumed` entry is an open question, never an

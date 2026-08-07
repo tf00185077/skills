@@ -11,9 +11,9 @@ It checks structure only. It does NOT judge whether the spec's content is good
 or complete -- that stays a human/agent judgement, deliberately un-pinned.
 
 Usage:
-    python validate_spec.py                      # validates docs/specs/*.md under cwd
-    python validate_spec.py path/to/spec.md ...  # validates the given files
-    python validate_spec.py docs/specs           # validates *.md in a directory
+    python validate_spec.py                          # validates docs/reviewspec/*/spec.md under cwd
+    python validate_spec.py path/to/spec.md ...      # validates the given files
+    python validate_spec.py docs/reviewspec/<build>  # validates spec.md in a build folder
 
 Exit code 0 if every file passes, 1 if any file has errors (warnings don't fail).
 """
@@ -152,25 +152,21 @@ def validate_file(path: str) -> list[Issue]:
 
 
 def _is_spec_file(path: str) -> bool:
-    """A spec is a `<slug>.md`, not a `.manifest.md` or `.review.md` sibling."""
-    low = path.lower()
-    return low.endswith(".md") and not (
-        low.endswith(".manifest.md") or low.endswith(".review.md")
-    )
+    """The spec is the file named `spec.md` (its siblings are manifest.md / review.md)."""
+    return os.path.basename(path).lower() == "spec.md"
 
 
 def resolve_paths(args: list[str]) -> list[str]:
-    # Default: every round's spec under docs/specs/<slug>/<slug>.md, skipping
-    # the .manifest.md / .review.md siblings in the same folder.
+    # Default: every build's spec at docs/reviewspec/<build>/spec.md (the fixed
+    # filename distinguishes it from its manifest.md / review.md siblings).
     if not args:
-        found = glob.glob(os.path.join("docs", "specs", "*", "*.md"))
-        return sorted(p for p in found if _is_spec_file(p))
+        return sorted(glob.glob(os.path.join("docs", "reviewspec", "*", "spec.md")))
     paths: list[str] = []
     for arg in args:
         if os.path.isdir(arg):
-            # A round folder (or docs/specs) — pick the spec file(s) inside.
-            found = glob.glob(os.path.join(arg, "*.md"))
-            paths.extend(sorted(p for p in found if _is_spec_file(p)))
+            # A build folder (or docs/reviewspec) — pick the spec file(s) inside.
+            found = glob.glob(os.path.join(arg, "spec.md")) or glob.glob(os.path.join(arg, "*", "spec.md"))
+            paths.extend(sorted(found))
         else:
             paths.append(arg)  # explicit file: validate exactly what was named
     return paths
@@ -187,7 +183,7 @@ def main(argv: list[str]) -> int:
 
     paths = resolve_paths(argv)
     if not paths:
-        print("No spec files found. Pass file paths, a directory, or run where docs/specs/*.md exists.")
+        print("No spec files found. Pass file paths, a build folder, or run where docs/reviewspec/*/spec.md exists.")
         return 1
 
     any_errors = False
