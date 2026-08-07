@@ -1,6 +1,6 @@
 # Handoff contracts: spec shape & claims manifest
 
-These are the interchange formats between the three roles (spec-authoring → coding → review-gate).
+These are the interchange formats between the three roles (reviewspec-converge → coding → reviewspec-review).
 They are as important as any role's internal logic: they're what let independently-run agents line
 up on the same intents without talking to each other.
 
@@ -25,25 +25,25 @@ test level.
 
 ### Artifacts: one folder per round
 
-Each user request is **one round**, and one round gets **its own folder** under `docs/specs/` in
+Each user request is **one round**, and one round gets **its own folder** under `docs/reviewspec/` in
 the target project (version-controlled next to the code). Inside that folder live the round's three
 artifacts, distinguished by suffix:
 
 ```
-docs/specs/<slug>/
-├── <slug>.md            ← the spec (this round's request)          — written by spec-authoring
-├── <slug>.manifest.md   ← the claims manifest                      — written by reliable-coding
-└── <slug>.review.md     ← the review-gate verdict + coverage map   — written by review-gate
+docs/reviewspec/<build>/
+├── <build>.md            ← the spec (this round's request)          — written by reviewspec-converge
+├── <build>.manifest.md   ← the claims manifest                      — written by reviewspec-build
+└── <build>.review.md     ← the reviewspec-review verdict + coverage map   — written by reviewspec-review
 ```
 
 Why a folder per round: the spec (an *input*), the manifest (the coding agent's *claims*), and the
 review (the gate's *verdict*) are three different kinds of thing produced by three different roles.
-Grouping them under one `<slug>/` keeps everything about one round together and traceable, while the
-`.manifest` / `.review` suffixes keep the *kinds* unambiguous. The base file `<slug>.md` (no suffix)
+Grouping them under one `<build>/` keeps everything about one round together and traceable, while the
+`.manifest` / `.review` suffixes keep the *kinds* unambiguous. The base file `<build>.md` (no suffix)
 is always the spec.
 
-The rest of this section describes the **spec** file (`<slug>.md`); the manifest and review shapes
-are defined later in this file and in the review-gate skill respectively.
+The rest of this section describes the **spec** file (`<build>.md`); the manifest and review shapes
+are defined later in this file and in the reviewspec-review skill respectively.
 
 **This format is a hard contract, not a suggestion.** Everything *inside* the fields is free prose
 (the spec's content stays minimal and un-pinned — that's a separate principle). But the *structure*
@@ -82,14 +82,14 @@ Hard rules:
 These rules are machine-checkable. Run the validator to enforce them:
 
 ```
-python <reliable-testing-core>/scripts/validate_spec.py docs/specs/<slug>/<slug>.md
+python <reviewspec-core>/scripts/validate_spec.py docs/reviewspec/<build>/spec.md
 ```
 
-With no arguments it checks every spec under `docs/specs/*/` (the `<slug>.md` files, skipping
+With no arguments it checks every spec under `docs/reviewspec/*/` (the `<build>.md` files, skipping
 `.manifest.md` / `.review.md`); pass a file or a round folder to target specific ones. Exit code
 0 = structurally valid, 1 = errors (warnings, e.g. a missing title, don't fail). It checks
 *structure* only — never whether the content is good or complete, which stays a deliberately
-un-pinned judgement. The spec-authoring agent runs this before handoff, and it can gate CI.
+un-pinned judgement. The reviewspec-converge agent runs this before handoff, and it can gate CI.
 
 **Good intent:** "A negative transfer amount is rejected and no funds move."
 (outcome + observable; `user_visible: yes`; `sensitivity: money`)
@@ -99,7 +99,7 @@ un-pinned judgement. The spec-authoring agent runs this before handoff, and it c
 
 ## Claims manifest shape
 
-Handed from the coding agent to the reviewer, written to `docs/specs/<slug>/<slug>.manifest.md`. For
+Handed from the coding agent to the reviewer, written to `docs/reviewspec/<build>/manifest.md`. For
 each behavior it implemented + tested:
 
 | Field | Meaning |
@@ -128,10 +128,10 @@ about "does this need E2E?" reduces to a disagreement about a risk attribute (`u
 Each user request is a round; rounds accumulate. A later round must not silently break an earlier
 round's certified behavior. The rules:
 
-1. **Prior specs persist and stay in force.** Every `docs/specs/<slug>/` remains; its intents stay
+1. **Prior specs persist and stay in force.** Every `docs/reviewspec/<build>/` remains; its intents stay
    binding unless *formally superseded* (below).
 2. **The full accumulated test suite must stay green, every round.** The coding agent runs the whole
-   suite (all rounds), not just this round's tests; the review-gate's PASS condition includes the
+   suite (all rounds), not just this round's tests; the reviewspec-review's PASS condition includes the
    entire suite being green.
 3. **Every previously-certified intent must keep a passing guarding test.** Losing one (test
    deleted, weakened, or now failing) is a **regression → FAIL**. This is the cheap, reliable
@@ -150,14 +150,14 @@ round's certified behavior. The rules:
 
 To enforce rule 3, there is one collection point listing every certified intent and the test that
 guards it. It is **generated, not hand-maintained** — `scripts/build_registry.py` derives
-`docs/specs/REGISTRY.md` from the per-round `*.review.md` files (which stay the single source of
-truth, so nothing drifts). Keyed by `<slug>/<id>` (intent ids are per-round, so the slug qualifies
-them). Rebuild it each round; the review-gate uses its "active intents" list as the checklist of
+`docs/reviewspec/REGISTRY.md` from the per-round `*.review.md` files (which stay the single source of
+truth, so nothing drifts). Keyed by `<build>/<id>` (intent ids are per-round, so the slug qualifies
+them). Rebuild it each round; the reviewspec-review uses its "active intents" list as the checklist of
 tests that must still pass.
 
 ```
-python <reliable-testing-core>/scripts/build_registry.py        # writes docs/specs/REGISTRY.md
+python <reviewspec-core>/scripts/build_registry.py        # writes docs/reviewspec/REGISTRY.md
 ```
 
 For the registry to be buildable, each `*.review.md` must carry a machine-readable coverage table —
-that format is defined in the review-gate skill.
+that format is defined in the reviewspec-review skill.

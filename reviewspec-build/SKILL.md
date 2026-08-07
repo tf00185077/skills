@@ -1,10 +1,10 @@
 ---
-name: reliable-coding
+name: reviewspec-build
 description: >-
   The "coding agent" role of the reliable-testing system: implement a feature or
   bugfix AND produce trustworthy tests plus a claims manifest, against a shared
-  spec, so an independent review-gate can later certify it without manual QA. Use
-  this whenever you are writing code that will be audited by the review-gate
+  spec, so an independent reviewspec-review can later certify it without manual QA. Use
+  this whenever you are writing code that will be audited by the reviewspec-review
   skill, or whenever a shared spec + claims-manifest workflow is in play (a
   coding-agent / review-agent split). Trigger it on requests like "implement this
   against the spec and hand it to review", "write the code and the tests the
@@ -13,7 +13,7 @@ description: >-
   makes you derive test level from risk, write tests that genuinely verify
   behavior (not your own implementation), keep real boundaries un-mocked, and
   hand over an honest manifest. Not for throwaway prototypes or code with no
-  review step. Load `reliable-testing-core` alongside it.
+  review step. Load `reviewspec-core` alongside it.
 ---
 
 # Reliable Coding (the "coding" role)
@@ -26,14 +26,14 @@ produce three things for an independent reviewer:
 3. **A claims manifest** — an honest map of what you tested, at what layer, against what real
    environment, at what risk tier.
 
-Your work will be audited by the **review-gate** skill, run by a *different* agent. That reviewer
+Your work will be audited by the **reviewspec-review** skill, run by a *different* agent. That reviewer
 will independently re-derive the intents from the spec and try to **break** your code to see if a
 test screams. So the goal here is not "make the tests green" — green is trivial and meaningless on
 its own. The goal is code whose tests **survive an adversary trying to break it**. Build for that.
 
 ## Prerequisite: load the shared core
 
-Load **`reliable-testing-core`** first. It defines the spec shape, the claims-manifest shape, the
+Load **`reviewspec-core`** first. It defines the spec shape, the claims-manifest shape, the
 risk-tier rule, and the definition of a "trustworthy test." This skill applies those; it does not
 redefine them. When in doubt, the core is authoritative.
 
@@ -55,7 +55,7 @@ the failure this whole system exists to prevent.
 **But every intent needs a test, regardless of tier.** Tiering controls *when* you write the test
 (test-first is mandatory only for Critical/Core) and *how deeply* it gets break-tested — never
 *whether* a test exists. A spec intent with no test that genuinely verifies it is a gap the
-review-gate will FAIL on (its Check ②). "Peripheral / unit is fine" means the test may be a cheap
+reviewspec-review will FAIL on (its Check ②). "Peripheral / unit is fine" means the test may be a cheap
 unit test, not that it can be skipped.
 
 Why the tiering: writing the test first, from the spec, is the strongest defense against
@@ -87,7 +87,7 @@ real boundary in the manifest while mocking it is the single most common way a g
 the reviewer checks for it specifically.
 
 ### 5. Emit an honest claims manifest
-Write the manifest to `docs/specs/<slug>/<slug>.manifest.md` (same round folder as the spec). For
+Write the manifest to `docs/reviewspec/<build>/manifest.md` (same round folder as the spec). For
 each behavior, record: which intent it covers (**by `id`**, e.g. `INT-1`), the test layer, the
 real environment (or honestly, "mocked X"), and your tier assignment. See the manifest shape in the core's
 `references/contracts.md`.
@@ -133,11 +133,11 @@ them. Per the core's cross-round rules:
   conflicts with the new request, the prior *intent* is changing — that's a **spec amendment**, not
   yours to do silently: raise it so the spec is amended (human confirms) and the old intent is
   marked superseded. Then update its test deliberately.
-- The registry (`docs/specs/REGISTRY.md`) lists the prior intents whose tests must stay green; the
-  review-gate will check them.
+- The registry (`docs/reviewspec/REGISTRY.md`) lists the prior intents whose tests must stay green; the
+  reviewspec-review will check them.
 
 ## Handoff
 
 Deliver: code + tests (all green, output clean) + the claims manifest. State plainly which intents
 are Critical/Core/Peripheral and, honestly, anything you could not fully verify. Then it goes to the
-review-gate.
+reviewspec-review.

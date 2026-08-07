@@ -1,5 +1,5 @@
 ---
-name: review-gate
+name: reviewspec-review
 description: >-
   Independent review gate that decides whether an agent's code + tests are
   trustworthy enough to ship WITHOUT manual QA. Use this whenever you are the
@@ -28,7 +28,7 @@ You output one of three verdicts and, if it passes, an explicit map of what is a
 
 ## Prerequisite: load the shared core first
 
-Before running the gate, load the **`reliable-testing-core`** skill. It is the single source of
+Before running the gate, load the **`reviewspec-core`** skill. It is the single source of
 truth for the things this gate depends on: the spec shape, the claims-manifest shape, the risk-tier
 rule, and the definition of a "trustworthy test / no fake green." This skill applies those; it does
 not redefine them. If the core and this skill ever appear to disagree, the core wins.
@@ -59,12 +59,12 @@ The one thing you may change is a deliberate, temporary break you introduce for 
 
 1. **Shared spec** — intent + observable outcomes. Each intent should carry enough context to
    judge its *risk attributes* (is it user-visible? does it touch money / data-loss / security /
-   a core promise?). See the spec shape in `reliable-testing-core`'s `references/contracts.md`.
+   a core promise?). See the spec shape in `reviewspec-core`'s `references/contracts.md`.
 2. **Production code.**
 3. **Test code.**
-4. **Claims manifest** — at `docs/specs/<slug>/<slug>.manifest.md`; for each behavior: which test
+4. **Claims manifest** — at `docs/reviewspec/<build>/manifest.md`; for each behavior: which test
    layer covers it, what real environment it runs in, and the coding agent's self-assigned risk
-   tier. See the claims-manifest shape in `reliable-testing-core`'s `references/contracts.md`.
+   tier. See the claims-manifest shape in `reviewspec-core`'s `references/contracts.md`.
 5. **Ability to execute** — run the tests, temporarily mutate code and revert, run E2E.
 
 If the spec or the claims manifest is missing, stop and ask for it. You cannot run an independent
@@ -117,7 +117,7 @@ Per the core's cross-round rules:
 1. **Run the FULL accumulated test suite** (all rounds, not just this round's tests). It must be
    entirely green. A prior round's test now failing is a **regression → FAIL**.
 2. **Rebuild the registry and check every active prior intent still has a passing test.** Run
-   `python <reliable-testing-core>/scripts/build_registry.py`, then for each row in REGISTRY.md's
+   `python <reviewspec-core>/scripts/build_registry.py`, then for each row in REGISTRY.md's
    "active intents" confirm its `guarding_test` still exists and passed in the suite run. A
    previously-certified intent that has lost its guarding test (deleted or weakened) is a
    **regression → FAIL** — even if the new round's own tests are green.
@@ -135,7 +135,7 @@ the hollow green we distrust elsewhere.
 Test *level* is not a matter of opinion and is not something the spec dictates. It is **derived**
 from each intent's risk attributes by the rule below. You and the coding agent apply the *same*
 rule to the *same* spec, so you should reach the same answer. This is the shared rule defined in
-`reliable-testing-core` — the table below is reproduced from it for convenience; the core is
+`reviewspec-core` — the table below is reproduced from it for convenience; the core is
 authoritative.
 
 | Tier | When | What the gate requires |
@@ -194,7 +194,7 @@ and what still needs their eyes — which is the whole point of a gate you can a
 ## Where to write the verdict — and its required machine-readable parts
 
 Write your verdict — the three-state result, the evidence-backed findings, the break-testing table,
-and (on PASS) the coverage map — to `docs/specs/<slug>/<slug>.review.md`, the same round folder as
+and (on PASS) the coverage map — to `docs/reviewspec/<build>/review.md`, the same round folder as
 the spec and manifest. This keeps one round's spec / manifest / review together and gives an audit
 trail. It is a report, not code: never modify production logic (no-fix rule).
 
@@ -218,12 +218,12 @@ Two parts of this file are a **hard contract** because the registry builder pars
    goes red when the behavior breaks); `status` is `active` (or `superseded` when this round formally
    supersedes a prior intent via a spec amendment). Everything else in the file is free prose.
 
-After writing it, rebuild the registry: `python <reliable-testing-core>/scripts/build_registry.py`.
+After writing it, rebuild the registry: `python <reviewspec-core>/scripts/build_registry.py`.
 
 ## Note on the shared core
 
 The spec shape, claims-manifest shape, risk-tier rule, and the definition of "trustworthy test / no
-fake green" all live in the **`reliable-testing-core`** skill (loaded as a prerequisite above),
-which the coding, spec-authoring, and review-gate skills all import — so the three never drift
+fake green" all live in the **`reviewspec-core`** skill (loaded as a prerequisite above),
+which the coding, reviewspec-converge, and reviewspec-review skills all import — so the three never drift
 apart. This skill applies those definitions; it does not own them. When in doubt, the core is
 authoritative.

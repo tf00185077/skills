@@ -1,8 +1,14 @@
 # Question Bank & Templates
 
-Full checklists and ready-to-paste prompts for `design-review-first`. Use these when you want
-the complete lists rather than the summaries in SKILL.md. Nothing here is domain-specific — it
-applies to any structural change.
+Full checklists and ready-to-paste prompts for `reviewspec-design-review`. Use these when you want
+the complete lists rather than the summaries in SKILL.md.
+
+**These are seed examples, not scripture.** The *procedures* here (the failure-policy separation,
+the adversarial prompt) are domain-independent, but the individual *question lists* were seeded
+from one backend post-mortem, so their coverage carries that shape. The truly portable engine is
+step 0 in SKILL.md and `domain-record.md`: it generates the questions a given request actually
+needs from that request's own nouns and verbs. When the engine and this list disagree, the engine
+wins — this list just saves you starting cold.
 
 ## Table of contents
 
@@ -22,8 +28,9 @@ Ask these before designing. They exist to catch a problem framed as something si
 
 1. What does this system **truly protect or guarantee**? What breaks in the real world if it fails?
 2. What is the **worst realistic failure scenario**?
-3. Is the **operator present** when it fails, or is it unattended / remote? If unattended, the
-   real job usually includes *diagnosis and self-preservation*, not only the happy path.
+3. When it fails, **who learns of it, how, and how soon?** (a user at the screen · a cron job with
+   nobody watching · a calling developer at runtime.) The further the audience from the failure,
+   the more the real job includes *diagnosis and self-preservation*, not only the happy path.
 4. If this piece breaks, **what diagnostic / repair entry point remains**?
 5. Which failures should be **fail-closed** (refuse, don't proceed)?
 6. Which failures are actually **transient** and should retry / warm up / degrade rather than
@@ -162,13 +169,10 @@ First answer:
 
 ---
 
-## Origin note
+## Status of these lists
 
-This skill was distilled from a post-mortem of a system where a managed auto-updater was fused
-with the normal-traffic path and a repair path, used one opaque error code for every failure,
-and collapsed a multi-valued health state into a single boolean — all while passing its full
-test suite. The specific taxonomy from that case (integrity / transaction / health gates;
-normal / maintenance / release planes) is a good *illustration* of step 4, but it is not
-universal law. The universal part is the **process** in SKILL.md: reframe, map failures,
-tabletop, separate by failure response, lock with fitness tests, review independently — before
-code.
+The question lists here are a seed, not scripture — a warm start, bounded by their author's
+experience. The portable part is the **process** in SKILL.md and the **generator** in
+`domain-record.md`: reframe, map failures, tabletop, separate by failure response, lock with
+fitness tests, review independently — before code. When the request-tailored generator and a
+fixed list here disagree, the generator wins.

@@ -1,8 +1,8 @@
 ---
-name: reliable-testing-core
+name: reviewspec-core
 description: >-
-  Shared foundation for the reliable-testing skill family (review-gate, coding,
-  spec-authoring). It is the single source of truth those skills all depend on,
+  Shared foundation for the reliable-testing skill family (reviewspec-review, coding,
+  reviewspec-converge). It is the single source of truth those skills all depend on,
   so they never drift apart. It defines: the common principles (internal vs.
   external correctness, intent-based minimal specs, test level derived not
   declared, author must differ from reviewer), the definition of a "trustworthy
@@ -20,9 +20,9 @@ description: >-
 
 This is the shared foundation for three role skills:
 
-- **spec-authoring** — turns a request into an intent-based spec.
+- **reviewspec-converge** — turns a request into an intent-based spec.
 - **coding** — implements + tests against the spec, emits a claims manifest.
-- **review-gate** — independently audits code + tests + spec, and gates.
+- **reviewspec-review** — independently audits code + tests + spec, and gates.
 
 Those three are separate skills (each loads only its own role's instructions, so roles don't
 contaminate each other). This core holds what all three must agree on. **It is the line that keeps
@@ -110,19 +110,19 @@ The interchange formats between the roles — spec shape and claims-manifest sha
 or auditing one.
 
 The spec format is machine-checkable — enforce it with **`scripts/validate_spec.py`** (see
-`references/contracts.md` for usage). The spec-authoring agent runs it before handoff; it can also
+`references/contracts.md` for usage). The reviewspec-converge agent runs it before handoff; it can also
 gate CI.
 
 Cross-round regression is guarded by an intent registry generated from the per-round review files —
-**`scripts/build_registry.py`** derives `docs/specs/REGISTRY.md`. The review-gate rebuilds it each
+**`scripts/build_registry.py`** derives `docs/reviewspec/REGISTRY.md`. The reviewspec-review rebuilds it each
 round and confirms every active prior intent still has a passing test. See "Cross-round rules" in
 `references/contracts.md`.
 
 ## How each role uses this core
 
-- **spec-authoring** writes specs conforming to the spec shape; assigns risk attributes so the tier
+- **reviewspec-converge** writes specs conforming to the spec shape; assigns risk attributes so the tier
   is derivable; keeps intents outcome-based and minimal.
 - **coding** derives each intent's tier via the rule, meets the required scrutiny, avoids mocking at
   claimed real boundaries, and emits a claims manifest.
-- **review-gate** independently re-derives intents and tiers from the spec, then verifies each
+- **reviewspec-review** independently re-derives intents and tiers from the spec, then verifies each
   intent is a *trustworthy test* (the 3 conditions), primarily via break-testing.
