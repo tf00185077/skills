@@ -1,0 +1,4 @@
+interface:
+  display_name: "3D 輪廓與曲面平順"
+  short_description: "修順 Blender 輪廓與曲面轉折，同時保留造型特徵與變形功能"
+  default_prompt: "使用 $smoothing-3d-contours 修順這個模型的輪廓與曲面，保留原有造型，並提供實際模型的同條件前後對照。"

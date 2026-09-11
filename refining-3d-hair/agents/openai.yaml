@@ -1,0 +1,4 @@
+interface:
+  display_name: "3D 頭髮質感與流暢度"
+  short_description: "精修頭髮的表面質感、髮束層次與線條連續性，保留原有髮型及風格"
+  default_prompt: "使用 $refining-3d-hair 改善這個模型的頭髮質感、髮束層次與線條流暢度，保留指定髮型及風格，提供保存後的實際對照與相關驗證。"

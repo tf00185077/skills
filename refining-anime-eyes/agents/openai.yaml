@@ -1,0 +1,4 @@
+interface:
+  display_name: "日系 3D 眼睛精修"
+  short_description: "改善日系角色眼睛的明暗、高光與眼皮配合，同時保留眼形和原本神情"
+  default_prompt: "使用 $refining-anime-eyes 依照參考精修這個角色的眼睛，保留眼形與神情，提供保存後的實際前後圖及必要的變形驗證。"
