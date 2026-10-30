@@ -9,9 +9,9 @@ Preserve knowledge that changes a future decision, not a transcript of completed
 
 ## Read and classify
 
-1. Resolve the canonical product root and existing document owners. Keep separate products' memory separate, even inside one company. Read the project entry, index, relevant topics and actual result/decision evidence.
-2. For routine review, inspect changed evidence and affected topics. For a bulk cleanup, read all selected input files completely and inspect their relevant formal authorities. Do not reread every transcript merely to prove diligence.
-3. Retain a fact only when it remains useful beyond the task, affects future judgment, has traceable support and has clear applicability. Exclude routine completion/review receipts, temporary state, secrets and unsupported claims. Keep candidate-specific counts/budgets with their original owners unless a precise value is needed to understand the reusable fact.
+1. Resolve the canonical product root. Keep separate products' memory separate, even inside one company. Read the project entry, index, relevant topics and actual result/decision evidence.
+2. For routine review, inspect changed evidence and affected topics. For a bulk cleanup, read all selected input files completely and inspect their relevant formal authorities.
+3. Retain a fact only when it remains useful beyond the task, affects future judgment, has traceable support and has clear applicability. Exclude routine completion/review receipts, temporary state, secrets and unsupported claims.
 4. Choose the necessary action:
 
 | Action | Decision |
@@ -26,9 +26,9 @@ Preserve knowledge that changes a future decision, not a transcript of completed
 ## Reconcile authority and meaning
 
 - Follow explicit approved supersession, not simply the newest timestamp. A pending proposal is not a decision; memory cannot approve scope, permissions, spending or retries.
-- Preserve the fact's project, candidate/version, host, trigger and uncertainty wherever they bound its validity. A historical successful build is not current runtime readiness; source/static acceptance is not integration or release acceptance.
-- Keep reasons and operating limits. Do not turn a script-specific guard into a platform constant, a corrected harness into a product fix, or an unexecuted branch into an observed result.
-- Retain meaningful evidence requirements explicitly: actual source/export hashes are not merely “provenance.” Distinguish authored work from generated output and use the applicable contract rather than copying its full tables into memory.
+- Preserve the fact's project, candidate/version, host, trigger and uncertainty wherever they bound its validity.
+- Keep reasons and operating limits. Do not state a fact more broadly or more strongly than its evidence supports.
+- Write dates as absolute dates (`YYYY-MM-DD`). Replace relative references such as "yesterday", "last week" or "recently" with the actual date.
 
 ## Write the smallest useful store
 
@@ -42,22 +42,22 @@ Each `docs/memory/{ref}.md` answers one independently useful question, with a st
 - **How to apply:** future use, practical action and limits.
 - **Evidence:** real canonical decisions, records or retained verification, bound to the claim.
 
-Split by retrieval need, not paragraph, milestone or date. Merge related observations when their correction needs to be understood together. There is no topic-file quota or target line count. A smaller index can coexist with more total Markdown; do not claim token/latency savings without measuring them.
+Split by retrieval need, not paragraph, milestone or date. Merge related observations when their correction needs to be understood together. There is no topic-file quota or target line count.
 
-Use [the anonymized worked example](references/memory-curation-example.md) when learning the transformation or reviewing an ambiguous split/merge/supersession. It is example data, not another project's operating policy.
+Follow [the format example](references/memory-curation-example.md) for every index line and topic file.
 
 ## Apply safely
 
 - Read fresh bytes and preserve unrelated dirty work. Coordinate a conflicting writer; do not overwrite changes made after the review.
-- Before a destructive merge/deletion or bulk replacement, preserve necessary source bytes outside active memory. Prefer existing retained evidence over creating a duplicate archive. Git HEAD is not a backup of uncommitted work.
-- Create/validate destinations before changing the index or retiring sources. Repair active incoming reading routes. Historical citations may point to an unchanged retained witness; do not rewrite historical verdicts or edit frozen deliveries.
+- Before a destructive merge/deletion or bulk replacement, preserve necessary source bytes outside active memory. Git HEAD is not a backup of uncommitted work.
+- Create/validate destinations before changing the index or retiring sources. Repair active incoming reading routes.
 - Use canonical project/native evidence links in active topics. Sample-relative paths, audit outputs and private rollback backups are not substitutes for a usable project evidence route.
 - Stay within authorized documentation changes. Do not start agents, replay experiments, alter services/permissions, add schedules, or commit/push merely to curate memory.
 
 ## Validate and report
 
-Verify the changed topics' metadata/sections, one-to-one index/file targets, relative links and relevant incoming routes. Separately read for lost qualifiers, contradictory defaults and unsupported stronger claims. Check a representative retrieval question after a substantial restructure. Use the smallest adequate checks; an independent model review is not required on every routine edit.
+Verify the changed topics' metadata/sections, one-to-one index/file targets, relative links and relevant incoming routes. Separately read for lost qualifiers, contradictory defaults and unsupported stronger claims. Check a representative retrieval question after a substantial restructure.
 
-The normal deliverable is the updated index/topics and a concise result through the caller's existing reporting mechanism: changed refs and reason, or `Memory review: reviewed; no change`. Do not create a task, waiting comment or another agent wake solely to record a review. No mandatory verification folder, JSON/CSV ledger, before/after package or independent review report is required.
+The normal deliverable is the updated index/topics and a concise result through the caller's existing reporting mechanism: changed refs and reason, or `Memory review: reviewed; no change`.
 
-If synchronization fails, preserve valid content and report the exact gap and any partial changes already saved. Do not present an incomplete reorganization as complete or replay product work to fill evidence gaps. Distinguish files actually saved from downstream adoption or runtime behavior actually tested.
+If synchronization fails, preserve valid content and report the exact gap and any partial changes already saved. Do not present an incomplete reorganization as complete. Distinguish files actually saved from downstream adoption or runtime behavior actually tested.
