@@ -28,7 +28,6 @@ Preserve knowledge that changes a future decision, not a transcript of completed
 - Follow explicit approved supersession, not simply the newest timestamp. A pending proposal is not a decision; memory cannot approve scope, permissions, spending or retries.
 - Preserve the fact's project, candidate/version, host, trigger and uncertainty wherever they bound its validity.
 - Keep reasons and operating limits. Do not state a fact more broadly or more strongly than its evidence supports.
-- Write dates as absolute dates (`YYYY-MM-DD`). Replace relative references such as "yesterday", "last week" or "recently" with the actual date.
 
 ## Write the smallest useful store
 
@@ -37,6 +36,7 @@ Preserve knowledge that changes a future decision, not a transcript of completed
 Each `docs/memory/{ref}.md` answers one independently useful question, with a stable kebab-case filename and:
 
 - YAML `name` matching the filename stem, a meaningful retrieval `description`, and `metadata.type: project`.
+- `metadata.curated_on: YYYY-MM-DD`: read the current local date from the runtime when writing a changed topic. This is the curation date, not an event or verification date; leave it unchanged on a no-change review.
 - **Context:** the supported fact, triggering conditions and only necessary incident detail.
 - **Why:** its durable importance or approved rationale.
 - **How to apply:** future use, practical action and limits.

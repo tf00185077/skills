@@ -1,13 +1,13 @@
 # Format example
 
-Use this exact shape for the index and every topic file. The content is fictional.
+Use this exact shape for the index and every topic file. The content and evidence path are fictional; `curated_on` illustrates the curation date, not the event date.
 
 ## `docs/memory/MEMORY.md`
 
 ```markdown
 # Project Memory
 
-- [Local API requires dev certificate](local-api-dev-certificate.md) — why local HTTPS calls fail; open before running the API locally.
+- [Local API dev certificate setup](local-api-dev-certificate.md) — diagnose the recorded Windows dev-certificate trust error before applying the approved fix.
 ```
 
 ## `docs/memory/local-api-dev-certificate.md`
@@ -15,22 +15,23 @@ Use this exact shape for the index and every topic file. The content is fictiona
 ```markdown
 ---
 name: local-api-dev-certificate
-description: "Why local HTTPS calls to the API fail without the dev certificate, and how to fix it."
+description: "Diagnose the recorded Windows local-API certificate trust error and apply the approved development-only setup."
 metadata:
   type: project
+  curated_on: "2026-10-30"
 ---
 
 ## Context
 
-On 2026-03-12, local HTTPS calls to the API failed with a certificate error until the project dev certificate was trusted. Observed on Windows 11 with the API run from `scripts/dev-api.ps1`.
+Local HTTPS calls to the API failed with a certificate error until the project dev certificate was trusted. Observed on Windows 11 with the API run from `scripts/dev-api.ps1`.
 
 ## Why
 
-The failure looks like an API bug but is an environment setup step, so it recurs on every new machine.
+This setup issue can recur in a new development environment where the project dev certificate is not trusted.
 
 ## How to apply
 
-When local calls fail with a certificate error, trust the dev certificate with `scripts/trust-dev-cert.ps1`, then retry. Applies to local development only, not to staging or production.
+For the recorded Windows development setup, first confirm that the error is caused by the untrusted project dev certificate, then follow the approved setup using `scripts/trust-dev-cert.ps1` and retry. Do not apply this fix to unrelated certificate errors, other environments, staging or production.
 
 ## Evidence
 
