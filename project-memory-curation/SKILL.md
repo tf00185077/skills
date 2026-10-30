@@ -40,7 +40,7 @@ Each `docs/memory/{ref}.md` answers one independently useful question, with a st
 - **Context:** the recurring situation and the supported conclusion, written so it applies without knowing the original milestone. Mention the source incident in at most one sentence; leave candidate codes, exact values, line numbers and hashes in the evidence source.
 - **Why:** its durable importance or approved rationale.
 - **How to apply:** future use, practical action and limits.
-- **Evidence:** links to durable project decisions, records or retained verification, bound to the claim. Local service URLs, sample-relative paths and private backups do not count.
+- **Evidence:** links to durable project decisions, records or retained verification, bound to the claim. Every link must resolve as a file in this repository or as a public `https://` URL; host-relative routes such as `/api/...` or `/ISSUE/...`, local service URLs, sample-relative paths and private backups do not count. If the only supporting record lives in such a service, link the closest durable project document and name the non-portable source in the report.
 
 Split by retrieval need, not paragraph, milestone or date. Do not map old sections or files to topics one-to-one; regroup by the situation in which a reader needs the knowledge. If one situation would make a reader open several topics together, merge them. Merge related observations when their correction needs to be understood together. There is no topic-file quota or target line count.
 
@@ -55,7 +55,7 @@ Follow [the format example](references/memory-curation-example.md) for every ind
 
 ## Validate and report
 
-Verify the changed topics' metadata/sections (including `curated_on`), one-to-one index/file targets, relative links and relevant incoming routes. Separately read for lost qualifiers, unsupported stronger claims, and repeated disclaimers or incident detail that belongs in evidence. For each changed topic, check that How to apply is still actionable if the reader has never heard of the original candidate or milestone. Check a representative retrieval question after a substantial restructure. Before finishing, write for each active topic the one sentence it adds beyond canonical documents and other topics; merge or remove any topic for which you cannot write that sentence.
+Verify the changed topics' metadata/sections (including `curated_on`), one-to-one index/file targets, that every link resolves in the repository or is a public https URL, and relevant incoming routes. Separately read for lost qualifiers, unsupported stronger claims, and repeated disclaimers or incident detail that belongs in evidence. For each changed topic, check that How to apply is still actionable if the reader has never heard of the original candidate or milestone. Check a representative retrieval question after a substantial restructure. Before finishing, write for each active topic the one sentence it adds beyond canonical documents and other topics; merge or remove any topic for which you cannot write that sentence.
 
 The normal deliverable is the updated index/topics and a concise result through the caller's existing reporting mechanism: changed refs and reason, or `Memory review: reviewed; no change`.
 
