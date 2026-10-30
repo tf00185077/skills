@@ -11,7 +11,7 @@ Preserve knowledge that changes a future decision, not a transcript of completed
 
 1. Resolve the canonical product root. Keep separate products' memory separate, even inside one company. Read the project entry, index, relevant topics and actual result/decision evidence.
 2. For routine review, inspect changed evidence and affected topics. For a bulk cleanup, read all selected input files completely and inspect their relevant formal authorities.
-3. Retain a fact only when the situation is likely to recur in future work (a fact bound to one commit, line number or harness revision must be generalized or dropped), affects future judgment, has traceable support and has clear applicability. Exclude routine completion/review receipts, temporary state, milestone verdicts and acceptance history (these live in decisions), secrets and unsupported claims. Before keeping a fact, check whether a canonical project document (engineering, QA, decisions) already states it. If so, keep only the lesson that document lacks and link to it; if nothing is left, do not keep the topic.
+3. Retain a fact only when the situation is likely to recur in future work (a fact bound to one commit, line number or harness revision must be generalized or dropped), affects future judgment, has traceable support and has clear applicability. Exclude routine completion/review receipts, temporary state, milestone verdicts and acceptance history (these live in decisions), secrets and unsupported claims. Before keeping a fact, check whether a canonical project document (engineering, QA, decisions) already states it. If so, keep only the lesson that document lacks and link to it; if nothing is left, do not keep the topic. A qualifier the document omits (such as "this limit belongs to one script, not the platform") counts as a lesson it lacks.
 4. Choose the necessary action:
 
 | Action | Decision |
@@ -50,7 +50,7 @@ Follow [the format example](references/memory-curation-example.md) for every ind
 
 - Read fresh bytes and preserve unrelated dirty work. Coordinate a conflicting writer; do not overwrite changes made after the review.
 - Before a destructive merge/deletion or bulk replacement, preserve necessary source bytes outside active memory. Git HEAD is not a backup of uncommitted work.
-- Create/validate destinations before changing the index or retiring sources. Repair active incoming reading routes.
+- Create/validate destinations before changing the index or retiring sources. Repair active incoming reading routes (index, agent instructions, documents still in force). Do not edit historical decisions or reports only to update links to a retired memory file.
 - Stay within authorized documentation changes. Do not start agents, replay experiments, alter services/permissions, add schedules, or commit/push merely to curate memory.
 
 ## Validate and report
