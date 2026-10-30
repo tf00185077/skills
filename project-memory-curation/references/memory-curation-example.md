@@ -31,7 +31,7 @@ This setup issue can recur in a new development environment where the project de
 
 ## How to apply
 
-For the recorded Windows development setup, first confirm that the error is caused by the untrusted project dev certificate, then follow the approved setup using `scripts/trust-dev-cert.ps1` and retry. Do not apply this fix to unrelated certificate errors, other environments, staging or production.
+For the recorded Windows development setup, first confirm that the error is caused by the untrusted project dev certificate, then follow the approved setup using `scripts/trust-dev-cert.ps1` and retry. Applies only to this error in local development.
 
 ## Evidence
 
