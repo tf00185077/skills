@@ -1,6 +1,6 @@
 ---
 name: paperclip-hermes-notify
-description: Use when a Producer needs to deliver a Paperclip question card to the existing Hermes conversation associated with a Discord channel.
+description: Use when a Producer needs the existing Hermes conversation for a Discord channel to answer a Paperclip question card and post the answer or blocker to that channel.
 ---
 
 # Paperclip question delivery
@@ -35,7 +35,7 @@ SESSION_ID="$("${HERMES_PYTHON}" -B "${SKILL_DIR}/scripts/channel_session.py" \
   check --channel-id "${CHANNEL_ID}" --binding "${SESSION_BINDING}")" || exit "$?"
 
 hermes chat --quiet --resume "${SESSION_ID}" --source tool --toolsets file,messaging \
-  -q "Process this Producer question card using the existing conversation context: ${QUESTION_CARD}. Use send_message action=list, then action=send to discord:${CHANNEL_ID} to report your answer or explicit blocker with the native card link. Return that response and the actual success, platform, chat_id and message_id, or the actual error."
+  -q "Process this Producer question card using the existing conversation context: ${QUESTION_CARD}. Use send_message action=list, then action=send to discord:${CHANNEL_ID} to report your answer or explicit blocker with the native card link. End that Discord message with this exact line: Source: Paperclip Producer via paperclip-hermes-notify. Return that response and the actual success, platform, chat_id and message_id, or the actual error."
 )
 ```
 
