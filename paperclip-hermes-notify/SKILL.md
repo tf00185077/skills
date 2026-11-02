@@ -1,6 +1,6 @@
 ---
 name: paperclip-hermes-notify
-description: Use whenever you, a Paperclip agent, have a question, decision or approval that needs the user's answer. This is how you reach the user: it hands the question card to the user's existing Hermes conversation for their Discord channel, which replies in that channel. Use it instead of asking in your own output or waiting for the user, even when the task never mentions Hermes or Discord.
+description: Use whenever you, a Paperclip agent, have a question, decision or approval that needs the user's answer. This is how you reach the user. It hands the question card to the user's existing Hermes conversation for their Discord channel, which replies in that channel. Use it instead of asking in your own output or waiting for the user, even when the task never mentions Hermes or Discord.
 ---
 
 # Paperclip question delivery
