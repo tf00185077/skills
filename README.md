@@ -11,5 +11,6 @@ in its own folder.
 | [refining-anime-eyes](refining-anime-eyes/SKILL.md) | Refine anime eye shapes, eyelash linework, double-eyelid creases, iris shading, and highlights against a visual reference, with saved-model verification. |
 | [refining-3d-hair](refining-3d-hair/SKILL.md) | Refine Blender hair surface quality, clump hierarchy, and smooth flow while preserving the character's hairstyle. |
 | [project-memory-curation](project-memory-curation/SKILL.md) | Curate durable project knowledge into a thin index and focused topics, with authority checks, safe edits and a fictional format example. Role-neutral; no scheduling or agent setup. |
+| [paperclip-hermes-notify](paperclip-hermes-notify/SKILL.md) | Send a Paperclip question card to a Discord channel through Hermes and verify the actual messaging receipt. |
 
 Each folder is self-contained — see its own `README.md` / `SKILL.md` for details.
