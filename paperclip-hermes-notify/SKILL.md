@@ -7,25 +7,46 @@ description: Use when a Producer needs to deliver a Paperclip question card to t
 
 ## Rules — read before running
 
-Run the command below **exactly as written**. The only things you may change are `CHANNEL_ID`, `QUESTION_CARD`, and `SESSION_ID` obtained from the lookup below. Everything else is fixed. Never substitute a fresh session or a remembered session ID.
+Run the block below **exactly as written**. Only change the five input assignments: `SKILL_DIR`, `HERMES_HOME`, `HERMES_PYTHON`, `CHANNEL_ID`, and `QUESTION_CARD`. `SESSION_BINDING` and `SESSION_ID` must come from the commands, never from memory or manual substitution. If it fails, return the exact error to Producer. Do not retry with changed or added arguments.
 
-This procedure resumes saved conversation history in a CLI process; it does not inject a turn into the live Discord Gateway worker. Requires the same Hermes profile/home for lookup and resume, the Hermes MCP conversation tools available to Producer, and host-confirmed exclusive use of the target session with saved messages. If those prerequisites cannot be verified, return the actual blocker without launching. Route metadata or an unended session row alone does not establish exclusive use.
+`SKILL_DIR` is the absolute directory containing this file and its bundled `scripts/` folder. Use the target Hermes profile home and the Python interpreter from the same Hermes installation as `hermes`; the paths below are the default local installation. `QUESTION_CARD` contains the full question and native card link.
+
+This resumes saved history in a CLI process, not the live Discord Gateway worker. **Before delivery, the session owner must have confirmed exclusive handoff.** The query helper checks routing and saved-history metadata, not Gateway ownership, and provides no lock. Without that handoff, report `exclusive_session_handoff_unverified` and do not run the delivery block. Do not invent an ownership check or bypass it with an environment flag.
 
 ## Start
 
-1. Set `CHANNEL_ID` to the destination Discord channel and `QUESTION_CARD` to the full question text and native card link.
-2. Call the native Hermes MCP tool `conversations_list` with `{"platform":"discord","search":"<CHANNEL_ID>","limit":200}`. This is an MCP tool call, not a shell command. The server entrypoint is `hermes mcp serve`; its connection must already be available to Producer.
-3. Call `conversation_get` with `{"session_key":"<returned session_key>"}` for candidates. Match the exact Discord `chat_id` and intended user-specific route. The fixed channel command requires a null `thread_id`. Stop on a missing, truncated, threaded or unresolved ambiguous result; do not pick the newest entry or fall back to a parent channel.
-4. Immediately before launch, call `conversation_get` again for the selected key. If its `session_id` differs from the selected ID, return `session_route_changed` without launching or silently retargeting. Otherwise set `SESSION_ID` to that nonempty ID and reconfirm exclusive use of this same session.
-5. With the prerequisites verified, run:
+The bundled helper calls the installed native MCP conversation handlers in-process. Producer needs no preconfigured MCP connection. It starts no event poller, reads no conversation contents, and never starts an agent or sends a message. It rejects missing, ambiguous, threaded, truncated, changed, archived or empty-history targets.
+
+Run this as **one Bash block**, changing only the five input values:
 
 ```bash
+SKILL_DIR='/absolute/path/to/paperclip-hermes-notify'
+export HERMES_HOME="${HOME}/.hermes"
+HERMES_PYTHON="${HOME}/.hermes/hermes-agent/venv/bin/python"
+CHANNEL_ID='<destination Discord channel ID>'
+QUESTION_CARD='<full question text and native card link>'
+
+SESSION_BINDING="$("${HERMES_PYTHON}" -B "${SKILL_DIR}/scripts/channel_session.py" \
+  resolve --channel-id "${CHANNEL_ID}")" || exit "$?"
+
+SESSION_ID="$("${HERMES_PYTHON}" -B "${SKILL_DIR}/scripts/channel_session.py" \
+  check --channel-id "${CHANNEL_ID}" --binding "${SESSION_BINDING}")" || exit "$?"
+
 hermes chat --quiet --resume "${SESSION_ID}" --source tool --toolsets file,messaging \
   -q "Process this Producer question card using the existing conversation context: ${QUESTION_CARD}. Use send_message action=list, then action=send to discord:${CHANNEL_ID} to report your answer or explicit blocker with the native card link. Return that response and the actual success, platform, chat_id and message_id, or the actual error."
 ```
 
+`resolve` prints a current binding as JSON. `check` queries again, requires the same profile/channel/session key/session ID, verifies saved user messages through SQLite `mode=ro`, and prints only the session ID to stdout. Both print metadata to stderr, including `exclusive_use: "not_checked"`; that is not an ownership guarantee. Neither command constructs or migrates the session database.
+
 ## Verify
 
-- Confirm the CLI's actual resume confirmation on stderr shows restored messages for the selected session, and retain its final `session_id:` line. A missing session, empty-history/fresh-start fallback, or unexplained identity change is not verified intake. Record an explicitly reported compression descendant rather than silently substituting an unrelated session.
-- Intake requires a substantive answer or explicit blocker for the question, not only a proposed send or receipt. Channel reporting additionally requires the actual messaging-tool receipt confirming Discord, the requested channel and a real message ID. Posting or transcript mirroring alone does not prove intake.
-- Return the selected `session_key`, requested and actual session IDs, response, and actual channel receipt or error to Producer. Process creation or exit code zero alone proves neither intake nor channel reporting. If it fails, return the exact error to Producer. Do not retry with changed or added arguments.
+- The CLI stderr must confirm restored messages and include its final `session_id:` line. Missing resume confirmation, a fresh-start fallback or an unexplained identity change is not verified intake; record an explicitly reported compression descendant.
+- Require an actual answer or explicit blocker for the question. Channel reporting additionally requires the actual messaging receipt: success, Discord, the requested `chat_id`, and a real `message_id`.
+- Return the binding, requested/actual session IDs, response and actual receipt or error to Producer. Process creation, exit zero, posting alone or transcript mirroring proves neither intake nor a completed handoff. Do not alter arguments and retry.
+
+To test the bundled helper without a live agent or real session data:
+
+```bash
+SKILL_DIR='/absolute/path/to/paperclip-hermes-notify'
+python3 -B -m unittest discover -s "${SKILL_DIR}/tests" -v
+```
