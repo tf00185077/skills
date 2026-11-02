@@ -5,6 +5,10 @@ description: Use when a Producer needs to send a Paperclip question card to a Di
 
 # Paperclip question notification
 
+## Rules — read before running
+
+Run the command below **exactly as written**. The only things you may change are the values of `CHANNEL_ID` and `QUESTION_CARD`. Everything else is fixed.
+
 ## Start
 
 Set `CHANNEL_ID` to the destination Discord channel and `QUESTION_CARD` to the question text and native card link, then run:
@@ -16,4 +20,4 @@ hermes chat --quiet --source tool --toolsets file,messaging \
 
 ## Verify
 
-Delivery succeeds when the messaging-tool receipt confirms Discord, the requested channel and a real message ID. Process creation or exit code zero without that receipt is not verified delivery. Return the actual receipt or error to Producer.
+Delivery succeeds when the messaging-tool receipt confirms Discord, the requested channel and a real message ID. Process creation or exit code zero without that receipt is not verified delivery. Return the actual receipt or error to Producer. If it fails, return the exact error to Producer. Do not retry with changed or added arguments.
