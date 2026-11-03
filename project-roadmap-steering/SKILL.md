@@ -11,11 +11,11 @@ Keep the project's direction stable across fresh sessions. Deciding *what* to pr
 
 | Document | Job | Who changes it |
 | --- | --- | --- |
-| `docs/ROADMAP.md` | Where the project is going and how to choose work | The owner approves; you draft and propose changes |
+| `docs/roadmap/ROADMAP.md` | Where the project is going and how to choose work | The owner approves; you draft and propose changes |
 | `docs/CURRENT.md` | One page: where the project is now | You overwrite it after every result |
 | `docs/PROGRESS.md` | History of what happened | You append to it; never rewrite earlier entries |
 
-Use the project's own paths if it names others. Follow [the format example](references/roadmap-example.md) for ROADMAP, CURRENT, a task Purpose paragraph and an owner question.
+Keep the ROADMAP at `docs/roadmap/ROADMAP.md`, in its own folder like `docs/memory/`; create the folder if it is missing. Link from it with paths relative to `docs/roadmap/`. Follow [the format example](references/roadmap-example.md) for ROADMAP, CURRENT, a task Purpose paragraph and an owner question.
 
 ## Who decides what
 

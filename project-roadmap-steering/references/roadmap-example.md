@@ -2,7 +2,7 @@
 
 Use this shape for ROADMAP, CURRENT, a task Purpose paragraph and an owner question. The project, its content and its links are fictional.
 
-## `docs/ROADMAP.md`
+## `docs/roadmap/ROADMAP.md`
 
 ```markdown
 # Roadmap
@@ -40,8 +40,8 @@ Level editor, online leaderboards and platform signing — revisit after M3.
 - Ask when any blocker lasts more than 2 days.
 
 ## Review history
-- 2026-02-20 — first roadmap approved by the owner ([decision](decisions/roadmap-v1.md)).
-- 2026-03-02 — M1 done; M2 activated by the owner ([decision](decisions/m1-review.md)).
+- 2026-02-20 — first roadmap approved by the owner ([decision](../decisions/roadmap-v1.md)).
+- 2026-03-02 — M1 done; M2 activated by the owner ([decision](../decisions/m1-review.md)).
 ```
 
 ## `docs/CURRENT.md`
