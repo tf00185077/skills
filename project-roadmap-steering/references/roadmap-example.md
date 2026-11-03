@@ -97,9 +97,14 @@ Cut-over and rollback rehearsal.
 ```markdown
 # Progress
 
-## Finished milestones
-- M1 — core puzzle confirmed satisfying, 2026-03-02. [Archive](progress/M1.md)
-- Before the roadmap — early prototypes. [Archive](progress/before-roadmap.md)
+History before the roadmap: [before-roadmap](progress/before-roadmap.md).
+
+## M1 — Is the core puzzle satisfying? (done 2026-03-02)
+Answer: yes, once a swap that lights no tiles no longer costs a move.
+Turning points:
+- 2026-02-24 — first 10-level build: the owner found failed swaps punishing. [Record](decisions/m1-playtest-1.md)
+- 2026-02-27 — failed swaps made free; the move counter now counts only lit swaps. [Record](decisions/free-failed-swaps.md)
+- 2026-03-02 — the owner confirmed M1 and activated M2. [Decision](decisions/m1-review.md)
 
 ## M2 (active)
 - 2026-03-04 — levels 11–20 accepted. [Record](decisions/levels-11-20.md)

@@ -15,7 +15,7 @@ What to propose and which task to pick are your judgment. When to stop and ask t
 | --- | --- | --- |
 | `docs/roadmap/ROADMAP.md` | Where the project is going and how to choose work | The owner approves; you draft and propose changes |
 | `docs/CURRENT.md` | One page: where the project is now | You overwrite it after every result |
-| `docs/PROGRESS.md` | History of what happened, with finished milestones archived under `docs/progress/` | You append to it and archive it; never rewrite entries |
+| `docs/PROGRESS.md` | How the project got here: one summary per finished milestone, then the active milestone's entries | You append entries and condense each finished milestone |
 
 Keep the ROADMAP in its own folder at `docs/roadmap/`, like `docs/memory/`. Create the folder if it is missing, and write its links relative to `docs/roadmap/`. Follow [the format examples](references/roadmap-example.md).
 
@@ -85,14 +85,17 @@ Each owner question states the situation in 2–3 sentences and gives 2–4 opti
 
 - After each task result is accepted or rejected: append a PROGRESS entry, overwrite CURRENT and update the trigger counters. An entry is one line: the date, the result or decision, and a link to the record that holds the detail. Keep identifiers, hashes and ledger counts in that record.
 - When a milestone's status changes or the owner answers: update the ROADMAP and its Review history.
-- When the owner confirms a milestone's exit, archive its PROGRESS entries unchanged to `docs/progress/<milestone>.md`. Leave `PROGRESS.md` with one summary line and an archive link per finished milestone, followed by the active milestone's entries. If the active milestone's entries pass 50, move the older half to `docs/progress/<milestone>-part1.md` (then `-part2`, and so on), and check whether a threshold trigger has fired. When a ROADMAP is first adopted, archive the existing PROGRESS unchanged to `docs/progress/before-roadmap.md`.
-- Never edit or reword PROGRESS entries; archiving moves them without change. PROGRESS is history for tracing, not required reading for other roles. Preserve each file's existing line endings and encoding.
+- When the owner confirms a milestone's exit, condense its PROGRESS entries into one milestone summary: the question and the answer it reached, each turning point (a decision, owner answer or failed attempt that changed the path) with its link, and the link to the owner's confirmation. Then delete that milestone's entries. `PROGRESS.md` holds one summary per finished milestone, followed by the active milestone's entries. If the active milestone passes 50 entries, condense the older ones the same way into a "so far" summary and check whether a threshold trigger has fired.
+- Delete an entry only when its content survives in the record it links to. Keep any entry with no durable record, or move it into the summary. A summary condenses but never changes a result, a verdict or a stated limit.
+- When a ROADMAP is first adopted, move the existing PROGRESS unchanged to `docs/progress/before-roadmap.md` and link it from the new `PROGRESS.md`. Older entries often lack linked records, so this first move does not condense them.
+- PROGRESS is history for tracing, not required reading for other roles. Preserve each file's existing line endings and encoding.
 
 ## Validate before finishing a planning turn
 
 - Each milestone question is about the product, its users or its operation, and names its evidence path.
 - Each active task names the evidence-path step it serves.
 - CURRENT reflects the latest result and today's date.
+- Each new PROGRESS entry is one line and links to a durable record; each condensed summary keeps every turning point.
 - No trigger condition is met without a recorded pending owner question.
 - Each in-force milestone has an owner-approval reference in the Review history.
 - The ROADMAP, CURRENT and any owner question pass the reader test.
