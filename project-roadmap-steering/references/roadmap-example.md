@@ -1,6 +1,6 @@
 # Format examples
 
-Use these shapes for the ROADMAP derivation, CURRENT, a task Purpose paragraph and an owner question. Both projects and all links are fictional. They show that the same derivation can produce very different milestone orders.
+Use these shapes for the ROADMAP derivation, CURRENT, PROGRESS, a task Purpose paragraph and an owner question. Both projects and all links are fictional. They show that the same derivation can produce very different milestone orders.
 
 ## Example A — a new puzzle game
 
@@ -90,6 +90,20 @@ Cut-over and rollback rehearsal.
 **Pending owner decisions:** none.
 
 **Counters:** non-advancing tasks in a row: 0 of 3 · longest blocker: none.
+```
+
+## `docs/PROGRESS.md`
+
+```markdown
+# Progress
+
+## Finished milestones
+- M1 — core puzzle confirmed satisfying, 2026-03-02. [Archive](progress/M1.md)
+- Before the roadmap — early prototypes. [Archive](progress/before-roadmap.md)
+
+## M2 (active)
+- 2026-03-04 — levels 11–20 accepted. [Record](decisions/levels-11-20.md)
+- 2026-03-08 — end-screen draft rejected; summary unreadable at small sizes. [Record](decisions/end-screen-r1.md)
 ```
 
 ## Task Purpose paragraph

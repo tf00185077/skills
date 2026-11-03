@@ -15,7 +15,7 @@ What to propose and which task to pick are your judgment. When to stop and ask t
 | --- | --- | --- |
 | `docs/roadmap/ROADMAP.md` | Where the project is going and how to choose work | The owner approves; you draft and propose changes |
 | `docs/CURRENT.md` | One page: where the project is now | You overwrite it after every result |
-| `docs/PROGRESS.md` | History of what happened | You append to it; never rewrite earlier entries |
+| `docs/PROGRESS.md` | History of what happened, with finished milestones archived under `docs/progress/` | You append to it and archive it; never rewrite entries |
 
 Keep the ROADMAP in its own folder at `docs/roadmap/`, like `docs/memory/`. Create the folder if it is missing, and write its links relative to `docs/roadmap/`. Follow [the format examples](references/roadmap-example.md).
 
@@ -83,9 +83,10 @@ Each owner question states the situation in 2–3 sentences and gives 2–4 opti
 
 ## Maintenance rules
 
-- After each task result is accepted or rejected: append a short PROGRESS entry, overwrite CURRENT and update the trigger counters.
+- After each task result is accepted or rejected: append a PROGRESS entry, overwrite CURRENT and update the trigger counters. An entry is one line: the date, the result or decision, and a link to the record that holds the detail. Keep identifiers, hashes and ledger counts in that record.
 - When a milestone's status changes or the owner answers: update the ROADMAP and its Review history.
-- Never edit earlier PROGRESS entries. PROGRESS is history for tracing, not required reading for other roles. Preserve each file's existing line endings and encoding.
+- When the owner confirms a milestone's exit, archive its PROGRESS entries unchanged to `docs/progress/<milestone>.md`. Leave `PROGRESS.md` with one summary line and an archive link per finished milestone, followed by the active milestone's entries. If the active milestone's entries pass 50, move the older half to `docs/progress/<milestone>-part1.md` (then `-part2`, and so on), and check whether a threshold trigger has fired. When a ROADMAP is first adopted, archive the existing PROGRESS unchanged to `docs/progress/before-roadmap.md`.
+- Never edit or reword PROGRESS entries; archiving moves them without change. PROGRESS is history for tracing, not required reading for other roles. Preserve each file's existing line endings and encoding.
 
 ## Validate before finishing a planning turn
 
