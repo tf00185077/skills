@@ -11,8 +11,9 @@ Preserve knowledge that changes a future decision, not a transcript of completed
 
 1. Resolve the canonical product root. Keep separate products' memory separate, even inside one company. Read the project entry, index, relevant topics and actual result/decision evidence.
 2. For routine review, inspect changed evidence and affected topics. For a bulk cleanup, read all selected input files completely and inspect their relevant formal authorities.
-3. Retain a fact only when the situation is likely to recur in future work (a fact bound to one commit, line number or harness revision must be generalized or dropped), affects future judgment, has traceable support and has clear applicability. Exclude routine completion/review receipts, temporary state, milestone verdicts and acceptance history (these live in decisions), secrets and unsupported claims. Before keeping a fact, check whether a canonical project document (engineering, QA, decisions) already states it. If so, keep only the lesson that document lacks and link to it; if nothing is left, do not keep the topic. A qualifier the document omits (such as "this limit belongs to one script, not the platform") counts as a lesson it lacks.
-4. Choose the necessary action:
+3. Retain a fact only when the situation is likely to recur in future work, affects future judgment, has traceable support and has clear applicability. Exclude routine completion/review receipts, temporary state, milestone verdicts and acceptance history (these live in decisions), secrets and unsupported claims.
+4. Test each remaining fact at its trigger. Picture a reader who has never seen this history, about to act in the situation where the fact matters. Using only what they would read there — the canonical documents (engineering, QA, decisions) and the evidence this memory links to — would they act wrongly? If not, remove the fact or reduce it to a one-line pointer to the document that covers it. If so, keep the sentence that prevents the most likely wrong action and link the authority. A fact being written somewhere does not pass this test when the reader would not reach it in time or would reach an older contradicting source first.
+5. Choose the necessary action:
 
 | Action | Decision |
 | --- | --- |
@@ -20,14 +21,14 @@ Preserve knowledge that changes a future decision, not a transcript of completed
 | Update | Correct the existing topic and its index summary; do not append a contradictory newer paragraph. |
 | Split | Separate independently useful questions/triggers that were bundled together. |
 | Merge | Combine overlapping facts or a failure and its bounded correction when they answer the same future question. |
-| Remove | Take obsolete/nonreusable material out of active memory, preserving necessary historical evidence with its existing owner. Also remove, or reduce to a one-line pointer, a lesson that a formal document has since adopted. |
+| Remove | Take obsolete/nonreusable material out of active memory, preserving necessary historical evidence with its existing owner. Also remove, or reduce to a one-line pointer, a lesson that no longer passes the trigger test because a formal document the reader will reach has since adopted it. |
 | Defer | Identify the exact unsupported claim or conflict; do not invent a fact or stop unrelated authorized work. |
 
 ## Reconcile authority and meaning
 
 - Follow explicit approved supersession, not simply the newest timestamp. A pending proposal is not a decision; memory cannot approve scope, permissions, spending or retries.
-- Preserve the fact's project, version, host, trigger and uncertainty wherever they bound its validity.
-- Keep reasons and operating limits. State the main limit once, in How to apply; do not list every conclusion the evidence fails to support.
+- Generalize the wording, never the scope. Removing a commit, line number, version, host or candidate code must not widen where the fact appears to apply; if it would, keep the bound (for example "verified on that source; recheck after model changes") or reduce the topic to a pointer.
+- Keep reasons and the one limit that blocks the most likely wrong action, stated once in How to apply. Do not list every other conclusion the evidence fails to support.
 
 ## Write the smallest useful store
 
@@ -55,7 +56,7 @@ Follow [the format example](references/memory-curation-example.md) for every ind
 
 ## Validate and report
 
-Verify the changed topics' metadata/sections (including `curated_on`), one-to-one index/file targets, that every link resolves in the repository or is a public https URL, and relevant incoming routes. Separately read for lost qualifiers, unsupported stronger claims, and repeated disclaimers or incident detail that belongs in evidence. For each changed topic, check that How to apply is still actionable if the reader has never heard of the original candidate or milestone. Check a representative retrieval question after a substantial restructure. Before finishing, write for each active topic the one sentence it adds beyond canonical documents and other topics; merge or remove any topic for which you cannot write that sentence.
+Verify the changed topics' metadata/sections (including `curated_on`), one-to-one index/file targets, that every link resolves in the repository or is a public https URL, and relevant incoming routes. Separately read for lost qualifiers, unsupported stronger claims, and repeated disclaimers or incident detail that belongs in evidence. For each changed topic, check that How to apply is still actionable if the reader has never heard of the original candidate or milestone. Check a representative retrieval question after a substantial restructure. Before finishing, write for each active topic its trigger, the wrong action a reader would take there without it, and the authority it points to; merge or remove any topic for which you cannot name that wrong action. For each removed or reduced topic, name the document that now stops that wrong action at the trigger.
 
 The normal deliverable is the updated index/topics and a concise result through the caller's existing reporting mechanism: changed refs and reason, or `Memory review: reviewed; no change`.
 
