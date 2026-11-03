@@ -181,17 +181,26 @@ class HistoryTests(unittest.TestCase):
 
 
 class CommandBlockTests(unittest.TestCase):
-    def run_block(self, fail_action=''):
+    def run_block(self, fail_action='', question=None, shell_flags=()):
         skill = (HELPER.parents[1] / 'SKILL.md').read_text()
         block = re.findall(r'```bash\n(.*?)\n```', skill, re.S)[0]
-        question = 'Fixture: "quoted", apostrophe\'s, $literal and $(printf LITERAL).\nfixture://card'
+        if question is None:
+            question = 'Fixture: "quoted", apostrophe\'s, $literal and $(printf LITERAL).\nfixture://card'
         values = {'SKILL_DIR': '/fixture/skill with spaces', 'HERMES_HOME': '/fixture/hermes',
-                  'HERMES_PYTHON': 'fixture_python', 'CHANNEL_ID': '123', 'QUESTION_CARD': question}
+                  'HERMES_PYTHON': 'fixture_python', 'CHANNEL_ID': '123'}
         for key, value in values.items():
             block, count = re.subn(r'^(?:export )?' + key + r'=.*$',
                                    lambda _: key + '=' + shlex.quote(value), block, flags=re.M)
             self.assertEqual(count, 1)
+        # Fill the literal body last, without changing the input-reading command
+        # or treating assignment-shaped lines in the question as shell inputs.
+        placeholder = '<full question text and native card link>'
+        self.assertEqual(block.count(placeholder), 1)
+        block = block.replace(placeholder, question)
         prefix = r'''
+if [[ "$FIXTURE_FAIL_ACTION" = read ]]; then
+  read() { printf '%s\n' 'fixture input failure, unchanged' >&2; return 27; }
+fi
 fixture_python() {
   if [[ "$3" = "$FIXTURE_FAIL_ACTION" ]]; then
     printf '%s\n' 'fixture query failure, unchanged' >&2
@@ -206,18 +215,57 @@ fixture_python() {
 hermes() { printf '%s\0' "$@"; }
 '''
         env = dict(os.environ, FIXTURE_FAIL_ACTION=fail_action)
-        result = subprocess.run(['bash', '-c', prefix + block], env=env, capture_output=True)
+        result = subprocess.run(['/bin/bash', *shell_flags, '-c', prefix + block],
+                                env=env, capture_output=True)
         return result, question
+
+    def assert_delivery(self, result, question):
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stderr, b'')
+        args = result.stdout.decode().split('\0')[:-1]
+        expected_prompt = (
+            'Process this Producer question card using the existing conversation context: '
+            + question + '. Use send_message action=list, then action=send to discord:123 '
+            'to report your answer or explicit blocker with the native card link. '
+            'End that Discord message with this exact line: '
+            'Source: Paperclip Producer via paperclip-hermes-notify. '
+            'Return that response and the actual success, platform, chat_id and message_id, '
+            'or the actual error.'
+        )
+        self.assertEqual(args, ['chat', '--quiet', '--resume', 'fixture-session',
+                                '--source', 'tool', '--toolsets', 'file,messaging',
+                                '-q', expected_prompt])
+
+    def test_bash_preserves_special_characters_as_literal_input(self):
+        cases = (
+            "apostrophe's",
+            '"double quotes" and single \'quotes\'',
+            '$literal $(printf SHOULD_NOT_RUN) `printf SHOULD_NOT_RUN`',
+            '中文問題\n  indented line\nbackslash \\path and ) * ? [abc]',
+            '',
+            '  leading and trailing spaces  ',
+            'line\n',
+            'line\n\n',
+            "CHANNEL_ID='literal question line'\nQUESTION_CARD=literal text",
+        )
+        for question in cases:
+            with self.subTest(question=question):
+                result, _ = self.run_block(question=question)
+                self.assert_delivery(result, question)
+
+    def test_input_reading_succeeds_with_errexit_and_nounset(self):
+        result, question = self.run_block(shell_flags=('-e', '-u'))
+        self.assert_delivery(result, question)
 
     def test_fixed_block_preserves_literal_question_and_flags(self):
         result, question = self.run_block()
-        self.assertEqual(result.returncode, 0, result.stderr)
-        args = result.stdout.decode().split('\0')[:-1]
-        self.assertEqual(args[:9], ['chat', '--quiet', '--resume', 'fixture-session',
-                                  '--source', 'tool', '--toolsets', 'file,messaging', '-q'])
-        self.assertEqual(len(args), 10)
-        self.assertIn(question, args[9])
-        self.assertIn('discord:123', args[9])
+        self.assert_delivery(result, question)
+
+    def test_unexpected_read_failure_stops_before_hermes(self):
+        result, _ = self.run_block('read')
+        self.assertEqual(result.returncode, 27)
+        self.assertEqual(result.stdout, b'')
+        self.assertEqual(result.stderr, b'fixture input failure, unchanged\n')
 
     def test_resolve_failure_stops_before_hermes(self):
         result, _ = self.run_block('resolve')
