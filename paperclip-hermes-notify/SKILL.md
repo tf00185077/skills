@@ -7,7 +7,7 @@ description: Use whenever you, a Paperclip agent, have a question, decision or a
 
 ## Rules — read before running
 
-Run the block below **exactly as written**. Only change the five input assignments: `SKILL_DIR`, `HERMES_HOME`, `HERMES_PYTHON`, `CHANNEL_ID`, and `QUESTION_CARD`. `SESSION_BINDING` and `SESSION_ID` must come from the commands, never from memory or manual substitution. If it fails, return the exact error to Producer. Do not retry with changed or added arguments.
+Run the block below **exactly as written**. Only change the five inputs: `SKILL_DIR`, `HERMES_HOME`, `HERMES_PYTHON`, `CHANNEL_ID`, and `QUESTION_CARD`. `SESSION_BINDING` and `SESSION_ID` must come from the commands, never from memory or manual substitution. If it fails, return the exact error to Producer. Do not retry with changed or added arguments.
 
 `SKILL_DIR` is the absolute directory containing this file and its bundled `scripts/` folder. Keep the default `HERMES_HOME` and `HERMES_PYTHON` values unless Producer provides other paths; do not search for them yourself. Put the full question text and native card link between the two `CARD` lines as-is; do not quote or escape it.
 
@@ -23,10 +23,14 @@ SKILL_DIR='/absolute/path/to/paperclip-hermes-notify'
 export HERMES_HOME="${HOME}/.hermes"
 HERMES_PYTHON="${HOME}/.hermes/hermes-agent/venv/bin/python"
 CHANNEL_ID='<destination Discord channel ID>'
-QUESTION_CARD="$(cat <<'CARD'
+# Read directly: nested command substitution misparses literals in Bash 3.2.
+QUESTION_READ_STATUS=0
+IFS= read -r -d '' QUESTION_CARD <<'CARD' || QUESTION_READ_STATUS=$?
 <full question text and native card link>
 CARD
-)"
+# read returns 1 at EOF; remove only the heredoc's structural final newline.
+[ "${QUESTION_READ_STATUS}" -le 1 ] || exit "${QUESTION_READ_STATUS}"
+QUESTION_CARD="${QUESTION_CARD%$'\n'}"
 
 SESSION_BINDING="$("${HERMES_PYTHON}" -B "${SKILL_DIR}/scripts/channel_session.py" \
   resolve --channel-id "${CHANNEL_ID}")" || exit "$?"
