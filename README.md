@@ -12,6 +12,6 @@ in its own folder.
 | [refining-3d-hair](refining-3d-hair/SKILL.md) | Refine Blender hair surface quality, clump hierarchy, and smooth flow while preserving the character's hairstyle. |
 | [project-memory-curation](project-memory-curation/SKILL.md) | Curate durable project knowledge into a thin index and focused topics, with authority checks, safe edits and a fictional format example. Role-neutral; no scheduling or agent setup. |
 | [project-roadmap-steering](project-roadmap-steering/SKILL.md) | Derive a project's ROADMAP from its destination, riskiest unknowns and the cheapest evidence for each; keep a one-page CURRENT and append-only PROGRESS; choose tasks on the evidence path and escalate to the owner by rule. Role- and project-neutral planning method. |
-| [paperclip-hermes-notify](paperclip-hermes-notify/SKILL.md) | Fixed Bash commands and a bundled read-only resolver for a Discord channel's current Hermes session; resume saved context under exclusive handoff and verify the response/receipt. |
+| [paperclip-hermes-notify](paperclip-hermes-notify/SKILL.md) | Fixed Bash commands and a bundled read-only resolver for a Discord channel's current Hermes session; resume saved context and verify the response/receipt. |
 
 Each folder is self-contained — see its own `README.md` / `SKILL.md` for details.

@@ -11,7 +11,7 @@ Run the block below **exactly as written**. Only change the five inputs: `SKILL_
 
 `SKILL_DIR` is the absolute directory containing this file and its bundled `scripts/` folder. Keep the default `HERMES_HOME` and `HERMES_PYTHON` values unless Producer provides other paths; do not search for them yourself. Put the full question text and native card link between the two `CARD` lines as-is; do not quote or escape it.
 
-This resumes saved history in a CLI process, not the live Discord Gateway worker. The query helper checks routing and saved-history metadata, not Gateway ownership, and provides no lock. Run the delivery block only when Producer's request explicitly includes `handoff_confirmed`. Otherwise, report `exclusive_session_handoff_unverified` to Producer and stop. Do not invent an ownership check or bypass it with an environment flag.
+This resumes saved history in a CLI process, not the live Discord Gateway worker. The query helper checks routing and saved-history metadata.
 
 ## Start
 
