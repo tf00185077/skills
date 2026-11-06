@@ -117,11 +117,45 @@ class HistoryTests(unittest.TestCase):
         self.assertEqual(self.mod.saved_message_count(self.home, 'fixture-session'), 1)
         self.assertEqual((self.home / 'state.db').read_bytes(), before)
 
-    def test_empty_history_stops(self):
+    def test_empty_history_returns_zero_without_modifying_database(self):
         with sqlite3.connect(self.home / 'state.db') as db:
             db.execute('DELETE FROM messages')
-        with self.assertRaisesRegex(RuntimeError, 'empty_session_history'):
-            self.mod.saved_message_count(self.home, 'fixture-session')
+        before = (self.home / 'state.db').read_bytes()
+        self.assertEqual(self.mod.saved_message_count(self.home, 'fixture-session'), 0)
+        self.assertEqual((self.home / 'state.db').read_bytes(), before)
+
+    def test_session_without_user_rows_is_valid(self):
+        with sqlite3.connect(self.home / 'state.db') as db:
+            db.execute('DELETE FROM messages')
+            db.execute('INSERT INTO messages VALUES (?, ?, ?)',
+                       ('fixture-session', 'assistant', 'FIXTURE ONLY'))
+        before = (self.home / 'state.db').read_bytes()
+        self.assertEqual(self.mod.saved_message_count(self.home, 'fixture-session'), 0)
+        self.assertEqual((self.home / 'state.db').read_bytes(), before)
+
+    def test_empty_session_resolve_then_check_preserves_identity(self):
+        with sqlite3.connect(self.home / 'state.db') as db:
+            db.execute('DELETE FROM messages')
+        before = (self.home / 'state.db').read_bytes()
+        code, raw, stderr = self.run_command(['resolve', '--channel-id', '123'])
+        self.assertEqual(code, 0, stderr)
+        binding = json.loads(raw)
+        self.assertEqual(binding['session_id'], 'fixture-session')
+        self.assertEqual(binding['saved_user_message_count'], 0)
+        code, session_id, stderr = self.run_command(
+            ['check', '--channel-id', '123', '--binding', raw])
+        self.assertEqual(code, 0, stderr)
+        self.assertEqual(session_id, 'fixture-session\n')
+        self.assertEqual((self.home / 'state.db').read_bytes(), before)
+
+    def test_empty_archived_session_still_stops(self):
+        with sqlite3.connect(self.home / 'state.db') as db:
+            db.execute('DELETE FROM messages')
+            db.execute('UPDATE sessions SET archived = 1')
+        code, stdout, stderr = self.run_command(['resolve', '--channel-id', '123'])
+        self.assertEqual(code, 1)
+        self.assertEqual(stdout, '')
+        self.assertEqual(stderr.strip(), 'session_archived')
 
     def test_archived_session_stops(self):
         with sqlite3.connect(self.home / 'state.db') as db:
@@ -233,8 +267,7 @@ hermes() { printf '%s\0' "$@"; }
             'or the actual error.'
         )
         self.assertEqual(args, ['chat', '--quiet', '--resume', 'fixture-session',
-                                '--source', 'tool', '--toolsets', 'file,messaging',
-                                '-q', expected_prompt])
+                                '--source', 'tool', '-q', expected_prompt])
 
     def test_bash_preserves_special_characters_as_literal_input(self):
         cases = (

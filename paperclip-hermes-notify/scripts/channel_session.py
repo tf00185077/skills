@@ -95,8 +95,8 @@ def saved_message_count(home, session_id):
             raise RuntimeError('session_archived')
         count = db.execute("SELECT COUNT(*) FROM messages WHERE session_id = ? AND role = 'user'",
                            (session_id,)).fetchone()[0]
-    if not count:
-        raise RuntimeError('empty_session_history')
+    # A valid session can be empty immediately after /new. The count is
+    # diagnostic metadata, not a prerequisite for using the current route.
     return count
 
 
